@@ -1,0 +1,15 @@
+:root{
+  --c-black:#050505; --c-ink:#0d0c0e; --c-brown:#280000; --c-deep:#560303;
+  --c-chumbo:#312D2D; --c-dark-gray:#1E2124; --c-gray:#606060;
+  --c-section:#FAF9F7; --c-white:#FFFFFF;
+  --c-red:#E50914; --c-red-bright:#FB2E0A; --c-orange:#FF481F;
+  --c-green:#3FBF7F; --c-amber:#FFC02E;
+  --c-w70:rgba(255,255,255,.72); --c-w45:rgba(255,255,255,.46); --c-w12:rgba(255,255,255,.13);
+  --c-b62:rgba(28,22,22,.62); --c-b12:rgba(20,10,10,.12);
+  --bg-dark:radial-gradient(ellipse 130% 110% at 80% 2%,#1a080b 0%,#0e0a0c 44%,#080709 100%);
+  --g-impact:linear-gradient(118deg,#7A0A02 0%,#C41E08 38%,#E50914 70%,#FB2E0A 100%);
+  --g-radial:radial-gradient(ellipse at 26% 88%,#E50914 0%,#7A0A02 34%,#3D0202 62%,#160606 100%);
+  --f-display:'Morganite',sans-serif; --f-body:'IBM Plex Sans',sans-serif;
+  --pad:clamp(46px,4.6vw,88px);
+  --headgap:clamp(22px,3.2vh,46px);
+}

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Class · Estruturação Estratégica · V4 Bilinski&Co</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://assets-relatorio-saber.vercel.app/fonts/fonts.css" rel="stylesheet">
+<style>
+
+
+
+
+
+/* ===================== TOKENS ===================== */
+:root{
+  --c-black:#050505; --c-ink:#0d0c0e; --c-brown:#280000; --c-brown-2:#3D0202; --c-deep:#560303;
+  --c-chumbo:#312D2D; --c-dark-gray:#1E2124; --c-gray:#606060;
+  --c-light-gray:#F2F2F2; --c-section:#FAF9F7; --c-white:#FFFFFF;
+  --c-red:#E50914; --c-red-soft:#F0141E; --c-red-deep:#650E0F; --c-red-bright:#FB2E0A;
+  --c-orange:#FF481F; --c-coral:#E88A70; --c-peach:#FFB4A0; --c-cream:#FFEBC8;
+  --c-w70:rgba(255,255,255,.72); --c-w45:rgba(255,255,255,.46); --c-w12:rgba(255,255,255,.13);
+  --c-b62:rgba(28,22,22,.62); --c-b12:rgba(20,10,10,.12);
+  --bg-dark:radial-gradient(ellipse 130% 110% at 80% 2%,#1a080b 0%,#0e0a0c 44%,#080709 100%);
+  --g-impact:linear-gradient(118deg,#7A0A02 0%,#C41E08 38%,#E50914 70%,#FB2E0A 100%);
+  --g-radial:radial-gradient(ellipse at 26% 88%,#E50914 0%,#7A0A02 34%,#3D0202 62%,#160606 100%);
+  --f-display:'Morganite',sans-serif; --f-body:'IBM Plex Sans',sans-serif;
+  --pad:clamp(50px,5vw,92px);
+  --headgap:clamp(28px,4vh,58px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--f-body);background:var(--c-black);color:var(--c-white);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===================== DECK ===================== */
+.deck{display:flex;height:100vh;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100vw;height:100vh;scroll-snap-align:start;position:relative;overflow:hidden;display:flex;background:var(--bg-dark)}
+.slide::after{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--g-impact);z-index:5;opacity:.92}
+.slide__inner{position:relative;z-index:3;width:100%;height:100%;padding:var(--pad);padding-bottom:calc(var(--pad) + 16px);display:flex;flex-direction:column;justify-content:flex-start}
+.head{display:flex;flex-direction:column;gap:13px;flex:0 0 auto}
+.zone{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;margin-top:var(--headgap)}
+.zone--top{justify-content:flex-start}
+
+.glow{position:absolute;z-index:0;border-radius:50%;filter:blur(120px);opacity:.2;pointer-events:none}
+.glow--br{width:50vw;height:50vw;right:-15vw;bottom:-19vw;background:radial-gradient(circle,var(--c-red),transparent 62%)}
+.glow--tl{width:36vw;height:36vw;left:-11vw;top:-13vw;background:radial-gradient(circle,var(--c-deep),transparent 64%)}
+
+/* ===================== GLASS ===================== */
+.glass{background:linear-gradient(155deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,.025) 64%);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(255,255,255,.15);border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.36),0 26px 56px -38px rgba(0,0,0,.7)}
+.slide--light .glass{background:linear-gradient(155deg,#fff,rgba(255,255,255,.5));border-color:var(--c-b12);box-shadow:inset 0 1px 0 #fff,0 26px 56px -40px rgba(0,0,0,.2)}
+
+/* ===================== TIPOGRAFIA ===================== */
+.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--f-body);font-size:clamp(11px,.82vw,13px);font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--c-w45)}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--c-red);flex:0 0 auto}
+.slide--light .eyebrow{color:var(--c-gray)}
+
+.display{font-family:var(--f-display);font-weight:700;text-transform:uppercase;line-height:.92;letter-spacing:.012em}
+.h-cover{font-size:clamp(74px,9.6vw,158px)}
+.h-section{font-size:clamp(58px,7.6vw,124px)}
+.h-title{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(50px,6vw,98px);line-height:.95;letter-spacing:.012em}
+.h-med{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(38px,4.2vw,70px);line-height:.98;letter-spacing:.01em}
+
+.clip{background:var(--g-impact);-webkit-background-clip:text;background-clip:text;color:transparent}
+.accent{color:#fff} .slide--light .accent{color:var(--c-red)}
+.body{font-family:var(--f-body);font-weight:400;font-size:clamp(15px,1.12vw,18px);line-height:1.6;max-width:46ch;color:var(--c-w70)}
+.body strong{color:#fff;font-weight:600}
+.lead{font-size:clamp(18px,1.6vw,26px);line-height:1.42;font-weight:300;color:#fff;max-width:32ch}
+.slide--light .body{color:var(--c-b62)} .slide--light .body strong,.slide--light .lead{color:var(--c-black)}
+
+/* ===================== ÍCONES ===================== */
+.ic{width:1em;height:1em;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+/* ===================== STEPPERS ===================== */
+.phases{display:flex;gap:9px;flex-wrap:wrap}
+.phase{display:inline-flex;align-items:center;gap:9px;padding:9px 17px;border-radius:12px;font-family:var(--f-body);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--c-w12);color:var(--c-w45);transition:.3s}
+.phase .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+.phase--active{color:#fff;border-color:rgba(255,255,255,.38);background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.36)}
+.phase--active .dot{background:var(--c-red);opacity:1;box-shadow:0 0 9px var(--c-red)}
+
+/* ===================== CO-BRANDING ===================== */
+.cobrand{display:flex;align-items:center;gap:clamp(28px,3.2vw,48px);padding:clamp(22px,2vw,30px) clamp(28px,2.6vw,42px)}
+.cobrand .mark{height:clamp(46px,4.8vw,66px);width:auto;display:block}
+.cobrand .sep{width:1px;height:clamp(48px,5.4vw,78px);background:linear-gradient(transparent,var(--c-w45),transparent)}
+.client-slot{display:flex;align-items:center;justify-content:center;min-width:clamp(160px,18vw,250px);height:clamp(62px,7vw,94px);border:1.5px dashed rgba(255,255,255,.32);border-radius:12px;font-family:var(--f-body);font-size:11.5px;letter-spacing:.05em;color:var(--c-w45);background:rgba(255,255,255,.04)}
+.client-slot img{max-height:74%;max-width:82%;object-fit:contain}
+
+/* ===================== SLOTS DE IMAGEM ===================== */
+.slot{position:relative;border-radius:16px;overflow:hidden;background:var(--c-dark-gray);display:flex;align-items:center;justify-content:center;box-shadow:0 36px 80px -46px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.05)}
+.slot[data-empty]{border:2px dashed rgba(255,255,255,.18);background:repeating-linear-gradient(45deg,#141417,#141417 14px,#18181c 14px,#18181c 28px)}
+.slide--light .slot[data-empty]{border-color:rgba(0,0,0,.16);background:repeating-linear-gradient(45deg,#efece8,#efece8 14px,#e7e3de 14px,#e7e3de 28px)}
+.slot__hint{text-align:center;padding:24px;font-family:var(--f-body);color:var(--c-w70)}
+.slide--light .slot__hint{color:var(--c-gray)}
+.slot__hint .tag{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;padding:6px 13px;border-radius:999px;background:var(--c-red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.slot__hint .desc{font-size:13px;line-height:1.4;max-width:30ch;margin:0 auto}
+.slot img{width:100%;height:100%;object-fit:cover;display:block}
+.slot__cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-family:var(--f-body);font-size:11.5px;color:#fff;background:linear-gradient(transparent,rgba(5,5,5,.88))}
+.bleed{position:absolute;inset:0;z-index:1}
+.bleed .slot{position:absolute;inset:0;border-radius:0;box-shadow:none}
+.bleed__scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.9) 0%,rgba(5,5,5,.55) 46%,transparent 76%);z-index:2}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2vw,30px);height:100%}
+
+/* ===================== LAYOUTS ===================== */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(38px,4.2vw,72px);align-items:center;height:100%}
+.split .col{display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,1.8vw,26px)}
+.split .slot{align-self:stretch;height:100%}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2vw,30px);height:100%;max-height:66vh}
+.card-ic{position:relative;overflow:hidden;border-radius:16px;padding:clamp(28px,2.8vw,42px);display:flex;flex-direction:column;gap:16px;justify-content:flex-end;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--c-w12);transition:.35s cubic-bezier(.16,1,.3,1)}
+.card-ic::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--c-red)}
+.card-ic .ic{font-size:clamp(30px,2.6vw,42px);color:#fff;opacity:.92;margin-bottom:auto}
+.card-ic h3{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(28px,2.8vw,46px);line-height:.96}
+.card-ic p{font-family:var(--f-body);font-size:clamp(13px,.98vw,16px);line-height:1.5;color:var(--c-w70)}
+.card-ic:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.3);background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03))}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,1.8vw,26px)}
+.kpi{border-radius:15px;padding:clamp(26px,2.4vw,36px);background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--c-w12);display:flex;flex-direction:column;gap:8px}
+.kpi .v{font-family:var(--f-display);font-weight:700;font-size:clamp(54px,5.6vw,98px);line-height:.88}
+.kpi .l{font-family:var(--f-body);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--c-w70)}
+.kpi .d{font-family:var(--f-body);font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:6px;color:var(--c-w45)}
+.kpi .d.neg{color:var(--c-red)}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,2.4vw,40px);height:100%;align-items:stretch}
+.compare .card{border-radius:18px;padding:clamp(30px,3vw,52px);display:flex;flex-direction:column;gap:14px;justify-content:center;position:relative;overflow:hidden}
+.compare .card--before{background:#191b1e;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.compare .card--after{background:var(--g-impact);box-shadow:0 46px 92px -56px var(--c-red)}
+.compare .lab{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--c-w45)}
+.compare .card--after .lab{color:rgba(255,255,255,.85)}
+.compare .big{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(56px,6vw,104px);line-height:.84}
+
+.chart{display:flex;align-items:flex-end;gap:clamp(16px,2.2vw,40px);height:100%;border-bottom:1px solid var(--c-w12);padding-bottom:2px}
+.slide--light .chart{border-color:var(--c-b12)}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:13px;height:100%}
+.bar .fill{width:100%;border-radius:9px 9px 0 0;background:#212327;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.slide--light .bar .fill{background:#e6e2dd;box-shadow:none}
+.bar.is-key .fill{background:var(--g-impact);box-shadow:0 0 44px -12px var(--c-red)}
+.bar .val{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,3.8vw,62px);line-height:1}
+.bar .lab{font-family:var(--f-body);font-size:12px;color:var(--c-w70);text-align:center}
+.slide--light .bar .lab{color:var(--c-gray)}
+
+/* gráfico de linha (proporção preservada, pontos redondos) */
+.linechart{width:100%;height:100%;display:block;overflow:visible}
+
+/* donut maior + legenda maior */
+.donut-row{display:flex;align-items:center;gap:clamp(46px,6vw,104px);height:100%}
+.donut{position:relative;width:clamp(220px,24vw,340px);aspect-ratio:1;border-radius:50%;flex:0 0 auto;
+  background:conic-gradient(var(--c-red) 0 61%,var(--bg-dark2,#0e0a0c) 61% 61.7%,var(--c-orange) 61.7% 80%,#0e0a0c 80% 80.7%,#3a3d42 80.7% 100%)}
+.donut::after{content:"";position:absolute;inset:15%;border-radius:50%;background:#0e0a0c;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.donut .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+.donut .center b{font-family:var(--f-display);font-weight:700;font-size:clamp(58px,5.6vw,98px);line-height:.82;color:#fff}
+.donut .center span{font-family:var(--f-body);font-size:clamp(11px,1vw,13px);letter-spacing:.1em;text-transform:uppercase;color:var(--c-w70);margin-top:4px}
+.legend{display:flex;flex-direction:column;gap:clamp(22px,2.6vw,36px)}
+.legend li{list-style:none;display:flex;align-items:flex-start;gap:16px;font-family:var(--f-body)}
+.legend .sw{width:16px;height:16px;border-radius:5px;flex:0 0 auto;margin-top:9px}
+.legend .info{display:flex;flex-direction:column;gap:1px}
+.legend b{font-family:var(--f-display);font-weight:700;font-size:clamp(38px,3.6vw,58px);color:#fff;line-height:.9}
+.legend small{font-size:clamp(14px,1.15vw,18px);color:var(--c-w70)}
+
+/* tabelas */
+.tbl{width:100%;border-collapse:collapse;font-family:var(--f-body)}
+.tbl th{text-align:left;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--c-gray);padding:15px 16px;border-bottom:1px solid var(--c-b12)}
+.tbl td{padding:clamp(13px,1.5vw,18px) 16px;border-bottom:1px solid rgba(0,0,0,.07);font-size:clamp(14px,1.05vw,17px);color:var(--c-b62)}
+.tbl td.num{text-align:right;font-family:var(--f-display);font-weight:700;font-size:clamp(24px,2.1vw,36px);color:var(--c-black)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .hl{color:var(--c-red)}
+.tbl .st{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.tbl .st-crit{background:rgba(229,9,20,.12);color:#E50914}
+.tbl .st-warn{background:rgba(255,72,31,.14);color:#d3380f}
+.tbl .st-ok{background:rgba(0,0,0,.06);color:#606060}
+.tbl tr.on td{background:rgba(229,9,20,.06)}
+.tbl tr.on td:first-child{color:var(--c-red);font-weight:700}
+.tbl .pill{display:inline-block;padding:4px 11px;border-radius:999px;background:rgba(229,9,20,.1);color:var(--c-red);font-size:11px;font-weight:600;letter-spacing:.04em}
+
+.quote .qmark{font-family:var(--f-display);font-weight:700;font-size:clamp(130px,16vw,240px);line-height:.46;color:rgba(255,255,255,.2)}
+.quote blockquote{font-family:var(--f-body);font-weight:300;font-size:clamp(28px,3.5vw,58px);line-height:1.18;max-width:17ch;margin-top:.05em;color:#fff}
+.quote cite{display:block;margin-top:28px;font-style:normal;font-size:12.5px;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+
+.timeline{display:flex;position:relative;width:100%}
+.timeline::before{content:"";position:absolute;top:8px;left:6%;right:6%;height:1px;background:var(--c-w12)}
+.tl{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;position:relative;padding:0 12px}
+.tl .pt{width:17px;height:17px;border-radius:50%;background:var(--c-ink);border:2px solid var(--c-w45);z-index:2}
+.tl.on .pt{background:var(--c-red);border-color:var(--c-red);box-shadow:0 0 0 5px rgba(229,9,20,.22),0 0 18px var(--c-red)}
+.tl .ph{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,2.4vw,38px)}
+.tl.off{opacity:.42}
+.tl .d{font-family:var(--f-body);font-size:12.5px;line-height:1.4;color:var(--c-w70);max-width:20ch}
+
+/* cronograma */
+.crono{display:flex;flex-direction:column;width:100%}
+.crono-item{display:flex;align-items:center;gap:clamp(20px,2.6vw,40px);padding:clamp(18px,2.4vh,30px) 0;border-bottom:1px solid var(--c-w12)}
+.crono-item:first-child{border-top:1px solid var(--c-w12)}
+.crono-ico{flex:0 0 auto;width:clamp(54px,5vw,78px);height:clamp(54px,5vw,78px);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:clamp(26px,2.4vw,36px);color:var(--c-w45);background:rgba(255,255,255,.05);border:1px solid var(--c-w12);transition:.3s}
+.crono-item.on .crono-ico{color:#fff;border-color:var(--c-red);background:linear-gradient(155deg,rgba(229,9,20,.25),rgba(229,9,20,.05));box-shadow:0 0 26px -8px var(--c-red)}
+.crono-txt{flex:1 1 auto;display:flex;flex-direction:column;gap:4px}
+.crono-t{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(30px,3.2vw,52px);line-height:.96;color:var(--c-w45)}
+.crono-item.on .crono-t{color:#fff}
+.crono-sub{font-family:var(--f-body);font-size:clamp(12px,.95vw,15px);color:var(--c-w45)}
+.crono-meta{flex:0 0 auto;font-family:var(--f-body);font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--c-w45);text-align:right}
+.crono-item.on .crono-meta{color:var(--c-red-bright)}
+
+.divider{background:var(--c-brown)}
+.divider .slide__inner{justify-content:center}
+.divider .num{font-family:var(--f-display);font-weight:700;font-size:clamp(64px,7vw,116px);line-height:1;color:var(--c-red-bright);margin-bottom:8px}
+.divider .secs{display:flex;gap:9px;margin-top:clamp(34px,4vw,58px)}
+
+.closing{background:var(--g-impact)}
+.closing .eyebrow::before{background:#fff}
+.steps{display:flex;flex-direction:column;gap:15px;max-width:52ch}
+.steps li{list-style:none;display:flex;gap:17px;align-items:center;font-family:var(--f-body);font-size:clamp(14px,1.1vw,18px);line-height:1.4;color:rgba(255,255,255,.85);padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.18)}
+.steps li:last-child{border-bottom:0}
+.steps .ic-wrap{flex:0 0 auto;width:clamp(40px,3.2vw,50px);height:clamp(40px,3.2vw,50px);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:clamp(19px,1.7vw,24px);color:#fff;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3)}
+.steps strong{color:#fff;font-weight:600}
+
+.sig{position:absolute;z-index:6;left:var(--pad);right:var(--pad);bottom:26px;display:flex;justify-content:space-between;align-items:center;font-family:var(--f-body);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--c-w45)}
+.sig .bili{height:15px;opacity:.72} .sig .pg{font-variant-numeric:tabular-nums}
+.slide--light .sig{color:var(--c-gray)}
+
+.mt-s{margin-top:14px}.mt-m{margin-top:24px}
+.row{display:flex;align-items:center;justify-content:space-between}
+
+/* CAPA com foto + scrim */
+.cover{background:var(--g-radial)}
+.cover__photo{position:absolute;inset:0;z-index:0}
+.cover__photo .slot{position:absolute;inset:0;border-radius:0;box-shadow:none}
+.cover__scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(100deg,rgba(6,4,5,.96) 0%,rgba(14,6,7,.82) 30%,rgba(34,8,8,.4) 58%,rgba(34,8,8,.06) 100%)}
+.cover .slide__inner{z-index:3;justify-content:space-between}
+.cover__top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.cover__top .bili{height:30px;opacity:.95}
+.cover__sub{display:inline-flex;align-items:center;gap:11px;font-family:var(--f-body);font-size:clamp(12px,.95vw,15px);letter-spacing:.18em;text-transform:uppercase;color:var(--c-w70);margin-bottom:18px}
+.cover__sub::before{content:"";width:24px;height:2px;background:var(--c-red)}
+.cover__foot{display:flex}
+
+.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:12px;background:rgba(5,5,5,.55);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 13px}
+.nav button{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;transition:.2s;font-size:14px}
+.nav button:hover{background:var(--c-red)}
+.nav .count{font-family:var(--f-body);font-size:12px;color:var(--c-w70);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.hint{position:fixed;top:18px;left:18px;z-index:70;font-family:var(--f-body);font-size:10.5px;color:var(--c-w70);background:rgba(5,5,5,.55);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:7px 13px}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+.is-active .reveal{opacity:1;transform:none;transition-delay:calc(var(--d,0) * 80ms)}
+
+@page{size:1280px 720px;margin:0}
+@media print{
+  html,body{overflow:visible;height:auto}
+  .deck{display:block;height:auto;overflow:visible}
+  .slide{width:1280px;height:720px;page-break-after:always;break-after:page}
+  .slide:last-child{page-break-after:auto}
+  .nav,.hint,.grain{display:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* ===== AJUSTE SLIDES CLAROS ===== */
+.slide--light{background:var(--c-section)}
+.slide--light .h-title,.slide--light .h-med,.slide--light .h-section,.slide--light .display{color:var(--c-ink)}
+
+/* ===== CAPA: nome do cliente (sem caixa de logo) ===== */
+.cobrand .client-name{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(30px,3vw,48px);line-height:.95;letter-spacing:.01em;color:#fff;white-space:nowrap}
+
+/* ===== SLIDE EMPRESA (4x2, textos maiores) ===== */
+.infogrid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:clamp(14px,1.4vw,22px);height:100%;max-height:62vh}
+.infocard{position:relative;overflow:hidden;border-radius:15px;padding:clamp(22px,2vw,32px);display:flex;flex-direction:column;gap:11px;justify-content:center;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--c-w12)}
+.infocard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--c-red)}
+.infocard .lab{font-family:var(--f-body);font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--c-w45)}
+.infocard .val{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(34px,3vw,52px);line-height:.9;color:#fff}
+.infocard .txt{font-family:var(--f-body);font-size:clamp(15px,1.15vw,19px);line-height:1.45;color:rgba(255,255,255,.82)}
+
+/* ===== SLIDE VANTAGENS x ATENCAO ===== */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,2.2vw,36px);height:100%;align-items:stretch}
+.vs .col-card{border-radius:18px;padding:clamp(26px,2.6vw,42px);display:flex;flex-direction:column;gap:18px;justify-content:center;background:#fff;box-shadow:inset 0 0 0 1px var(--c-b12),0 30px 60px -50px rgba(0,0,0,.3)}
+.vs .col-card.att{background:var(--g-impact);box-shadow:0 40px 84px -56px var(--c-red)}
+.vs .col-head{display:flex;align-items:center;gap:11px;font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c-gray)}
+.vs .att .col-head{color:rgba(255,255,255,.88)}
+.vs ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.vs li{display:flex;gap:12px;font-family:var(--f-body);font-size:clamp(13px,1.02vw,16.5px);line-height:1.4;color:var(--c-b62)}
+.vs .att li{color:rgba(255,255,255,.94)}
+.vs li .ic{flex:0 0 auto;font-size:18px;margin-top:1px;color:var(--c-red)}
+.vs .att li .ic{color:#fff}
+
+/* ===== DONUT EM SLIDE CLARO (score) ===== */
+.donut--light{width:clamp(200px,20vw,290px)}
+.donut--light::after{background:#FAF9F7;box-shadow:inset 0 0 0 1px var(--c-b12)}
+.score-tbl td{padding:clamp(9px,1.1vh,14px) 16px}
+.score-tbl td.num{font-size:clamp(22px,1.9vw,32px)}
+.score-tbl th{padding:11px 16px}
+
+
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,1.8vw,28px);height:100%;max-height:68vh;align-items:stretch}
+.member{display:flex;flex-direction:column;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--c-w12);position:relative}
+.member::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--c-red);z-index:2}
+.member .photo{position:relative;width:100%;flex:1 1 auto;min-height:0;background:var(--c-dark-gray);overflow:hidden}
+.member .photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.member .info{padding:clamp(16px,1.5vw,22px) clamp(16px,1.6vw,24px) clamp(18px,1.8vw,26px)}
+.member .nm{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(24px,2.3vw,36px);line-height:.98;color:#fff}
+.member .rl{font-family:var(--f-body);font-size:clamp(12.5px,.98vw,15.5px);line-height:1.3;color:var(--c-w70);margin-top:7px}
+
+/* ===== SLIDE MODELO V4 (cards com bullets) ===== */
+.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,1.8vw,26px);height:100%;max-height:56vh;align-items:stretch}
+.jcard{position:relative;overflow:hidden;border-radius:16px;padding:clamp(22px,2.2vw,32px);display:flex;flex-direction:column;gap:15px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--c-w12)}
+.jcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.18)}
+.jcard.active{background:var(--g-impact);box-shadow:0 40px 84px -56px var(--c-red)}
+.jcard.active::before{background:#fff}
+.jcard .step{font-family:var(--f-body);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--c-w45)}
+.jcard.active .step{color:rgba(255,255,255,.9)}
+.jcard h3{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(30px,2.8vw,46px);line-height:.94;color:#fff}
+.jcard ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.jcard li{font-family:var(--f-body);font-size:clamp(12.5px,.95vw,15px);line-height:1.36;color:var(--c-w70);padding-left:16px;position:relative}
+.jcard.active li{color:rgba(255,255,255,.92)}
+.jcard li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--c-red)}
+.jcard.active li::before{background:#fff}
+.jcard .here{margin-top:auto;display:inline-flex;align-items:center;gap:7px;align-self:flex-start;padding:6px 13px;border-radius:999px;background:#fff;color:var(--c-red);font-family:var(--f-body);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+/* ===== TABELAS DE ENTREGAVEIS (semana a semana) ===== */
+.wtbl{width:100%;border-collapse:collapse;font-family:var(--f-body)}
+.wtbl th{text-align:left;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c-gray);padding:13px 18px;border-bottom:1px solid var(--c-b12);font-weight:600}
+.wtbl td{padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.07);font-size:clamp(15px,1.2vw,19px);color:var(--c-b62);vertical-align:middle}
+.wtbl td.etapa{font-weight:600;color:var(--c-black);background:rgba(229,9,20,.06);border-bottom:1px solid var(--c-b12);font-size:clamp(15px,1.2vw,19px)}
+.wtbl td.tarefa{color:var(--c-ink)}
+.wtbl td.dri{color:var(--c-gray);white-space:nowrap}
+.wtbl tr:last-child td{border-bottom:0}
+.wtbl--dense th{padding:9px 16px;font-size:11px}
+.wtbl--dense td{padding:8px 16px;font-size:clamp(12.5px,.98vw,15.5px);vertical-align:top}
+.wtbl--dense td.etapa{font-size:clamp(12.5px,.98vw,15.5px)}
+.wcount{font-family:var(--f-body);font-size:clamp(14px,1.1vw,18px);color:var(--c-gray);font-weight:500;margin-left:14px}
+
+/* ===== PROXIMOS PASSOS (dois cards) ===== */
+.twostep{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,2.4vw,38px);height:100%;align-items:stretch}
+.twostep .st-card{border-radius:18px;padding:clamp(28px,2.8vw,46px);display:flex;flex-direction:column;gap:16px;justify-content:center;position:relative;overflow:hidden}
+.twostep .st-card.now{background:var(--g-impact);box-shadow:0 40px 84px -56px var(--c-red)}
+.twostep .st-card.next{background:#191b1e;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.twostep .tag2{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-body);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.88)}
+.twostep .next .tag2{color:var(--c-w45)}
+.twostep h3{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(34px,3.4vw,56px);line-height:.94;color:#fff}
+.twostep ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.twostep li{font-family:var(--f-body);font-size:clamp(13px,1vw,16px);line-height:1.4;color:rgba(255,255,255,.86);padding-left:17px;position:relative}
+.twostep .next li{color:var(--c-w70)}
+.twostep li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:#fff}
+.twostep .next li::before{background:var(--c-red)}
+
+
+/* ===================== V4 · BASE GROWTH CLASS ===================== */
+:root{--logo:url(https://assets-relatorio-saber.vercel.app/img/growth-class/img-09.png)}
+.logo{display:block;background:var(--logo) left center/contain no-repeat;flex:0 0 auto}
+.logo--cover{height:clamp(26px,2.4vw,34px);width:clamp(74px,6.9vw,97px);opacity:.95}
+.logo--foot{height:clamp(46px,4.6vw,62px);width:clamp(131px,13.1vw,177px)}
+.logo--sig{height:26px;width:74px;opacity:.8}
+
+/* fotos de fundo */
+.ph-capa{background:url(https://assets-relatorio-saber.vercel.app/img/growth-class/img-01.webp) center/cover no-repeat}
+.ph-piloto{background:url(https://assets-relatorio-saber.vercel.app/img/growth-class/img-02.webp) center/cover no-repeat}
+.ph-noite{background:url(https://assets-relatorio-saber.vercel.app/img/growth-class/img-03.webp) center/cover no-repeat}
+.ph-fundo{background:url(https://assets-relatorio-saber.vercel.app/img/growth-class/img-04.webp) center/cover no-repeat}
+
+/* agenda em cards glass */
+.aglist{display:flex;flex-direction:column;gap:clamp(9px,1.5vh,16px);max-width:min(56ch,48vw)}
+.agrow{display:flex;align-items:center;gap:clamp(14px,1.5vw,22px);padding:clamp(12px,1.7vh,20px) clamp(18px,1.8vw,28px);border-radius:14px;transition:.3s cubic-bezier(.16,1,.3,1)}
+.agrow:hover{transform:translateX(5px);border-color:rgba(255,255,255,.3)}
+.agrow .n{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,2.5vw,44px);line-height:1;color:var(--c-red);flex:0 0 2ch}
+.agrow .t{font-family:var(--f-body);font-weight:700;font-size:clamp(15px,1.3vw,20px);line-height:1.2;letter-spacing:-.01em;color:#fff}
+.agrow .d{font-family:var(--f-body);font-size:clamp(12.5px,1vw,15.5px);color:var(--c-w70);margin-top:5px}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;font-family:var(--f-body);font-size:clamp(12px,1vw,15px);font-weight:600;color:#fff}
+.chip .dt{width:6px;height:6px;border-radius:50%;background:var(--c-red);flex:0 0 auto}
+
+/* bow tie */
+.btwrap{display:flex;flex-direction:column;gap:clamp(10px,1.4vh,18px);height:100%;justify-content:center;min-height:0}
+.btsvg{flex:1 1 auto;min-height:0;width:100%}
+
+/* card Ter em laranja */
+.jcard.warm{background:linear-gradient(118deg,#7A3202 0%,#C46308 38%,#FF7A00 72%,#FFA733 100%);border-color:transparent;box-shadow:0 40px 84px -56px #FF7A00}
+.jcard.warm::before{background:#fff}
+.jcard.warm .step{color:rgba(255,255,255,.9)}
+.jcard.warm li{color:rgba(255,255,255,.94)}
+.jcard.warm li::before{background:#fff}
+
+/* roadmap dos proximos passos */
+.roadmap{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,24px);height:100%;max-height:64vh;align-items:stretch}
+.roadmap::before{content:"";position:absolute;top:9px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,var(--c-red) 0%,#FF7A00 45%,rgba(255,255,255,.16) 100%)}
+.rm{position:relative;display:flex;flex-direction:column;padding-top:40px}
+.rm .pt2{position:absolute;top:9px;left:50%;transform:translate(-50%,-50%);width:17px;height:17px;border-radius:50%;background:#0e0a0c;border:2px solid var(--c-w45);z-index:2}
+.rm.on .pt2{background:var(--c-red);border-color:var(--c-red);box-shadow:0 0 0 5px rgba(229,9,20,.2),0 0 18px var(--c-red)}
+.rm .when{font-family:var(--f-body);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--c-w45);text-align:center;margin-bottom:12px}
+.rm.on .when{color:var(--c-red-bright)}
+.rm-card{flex:1;border-radius:16px;padding:clamp(18px,1.9vw,28px);display:flex;flex-direction:column;gap:10px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--c-w12)}
+.rm.on .rm-card{background:var(--g-impact);border-color:transparent;box-shadow:0 40px 84px -56px var(--c-red)}
+.rm-card h3{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(24px,2.3vw,38px);line-height:.96;color:#fff}
+.rm-card ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.rm-card li{font-family:var(--f-body);font-size:clamp(12px,.92vw,14.5px);line-height:1.38;color:var(--c-w70);padding-left:15px;position:relative}
+.rm-card li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--c-red)}
+.rm.on .rm-card li{color:rgba(255,255,255,.92)}
+.rm.on .rm-card li::before{background:#fff}
+.rm-card .here{margin-top:auto;display:inline-flex;align-items:center;gap:7px;align-self:flex-start;padding:6px 13px;border-radius:999px;background:#fff;color:var(--c-red);font-family:var(--f-body);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></symbol>
+  <symbol id="ic-alert" viewBox="0 0 24 24"><path d="M12 3 22 20H2Z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></symbol>
+  <symbol id="ic-funnel" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8Z"/></symbol>
+  <symbol id="ic-trend" viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="15 6 21 6 21 12"/></symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v6c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V6Z"/><polyline points="9 12 11 14 15 9.5"/></symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></symbol>
+  <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></symbol>
+  <symbol id="ic-flag" viewBox="0 0 24 24"><path d="M5 21V4h13l-2.5 4L18 12H5"/></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="ic-down" viewBox="0 0 24 24"><polyline points="6 10 12 16 18 10"/></symbol>
+  <symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.4 20a5.6 5.6 0 0 1 11.2 0"/><path d="M16 5.4a3 3 0 0 1 0 5.7"/><path d="M17.6 20a5.3 5.3 0 0 0-3-4.8"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><polyline points="5 12.5 10 17.5 19 7"/></symbol>
+  <symbol id="ic-layers" viewBox="0 0 24 24"><path d="M12 3 21 8l-9 5-9-5Z"/><polyline points="3 13 12 18 21 13"/></symbol>
+  <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4Z"/></symbol>
+  <symbol id="ic-folder" viewBox="0 0 24 24"><path d="M3 6h6l2 2h10v10H3Z"/></symbol>
+  <symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></symbol>
+</svg>
+
+<div class="deck" id="deck">
+
+  <!-- 01 · CAPA -->
+  <section class="slide cover">
+    <div class="cover__photo"><div class="slot ph-capa"></div></div>
+    <div class="cover__scrim"></div>
+    <div class="slide__inner">
+      <div class="cover__top reveal" style="justify-content:flex-end">
+        <div class="phases">
+          <span class="phase phase--active"><span class="dot"></span>Saber</span>
+          <span class="phase"><span class="dot"></span>Ter</span>
+          <span class="phase"><span class="dot"></span>Executar</span>
+          <span class="phase"><span class="dot"></span>Potencializar</span>
+        </div>
+      </div>
+      <div>
+        <div class="cover__sub reveal" style="--d:1">Growth Class · 2026</div>
+        <h1 class="display h-cover reveal" style="--d:2">Estruturação<br>Estratégica</h1>
+      </div>
+      <div class="cover__foot reveal" style="--d:3">
+        <span class="logo logo--foot"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · AGENDA -->
+  <section class="slide">
+    <div class="bleed"><div class="slot ph-piloto"></div></div>
+    <div class="bleed__scrim"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Sobre o que vamos falar · 30 minutos</p><h2 class="h-title">Sumário</h2></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="aglist">
+          <div class="glass agrow"><span class="n">01</span><div><div class="t">Seu time</div><div class="d">Os especialistas dedicados ao projeto.</div></div></div>
+          <div class="glass agrow"><span class="n">02</span><div><div class="t">O framework de crescimento</div><div class="d">O Bow Tie e as duas metades da receita.</div></div></div>
+          <div class="glass agrow"><span class="n">03</span><div><div class="t">O modelo V4</div><div class="d">Onde você está na jornada e o que vem depois.</div></div></div>
+          <div class="glass agrow"><span class="n">04</span><div><div class="t">Processos e entregas</div><div class="d">Semana a semana, do kick-off à entrega final.</div></div></div>
+          <div class="glass agrow"><span class="n">05</span><div><div class="t">Próximos passos</div><div class="d">Como vamos trabalhar juntos.</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 02</span></div>
+  </section>
+
+<section class="slide">
+    <div class="glow glow--br"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Com base na análise inicial</p><h2 class="h-med">Este é o seu time</h2></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="team">
+          <div class="member"><div class="photo"><img src="https://assets-relatorio-saber.vercel.app/img/growth-class/img-05.jpg" alt="Gabriel Araújo"></div><div class="info"><div class="nm">Gabriel Araújo</div><div class="rl">Coordenador de Performance</div></div></div>
+          <div class="member"><div class="photo"><img src="https://assets-relatorio-saber.vercel.app/img/growth-class/img-06.jpg" alt="Gabriela Aguiar"></div><div class="info"><div class="nm">Gabriela Aguiar</div><div class="rl">Especialista em Mídia</div></div></div>
+          <div class="member"><div class="photo"><img src="https://assets-relatorio-saber.vercel.app/img/growth-class/img-07.jpg" alt="Lucas de Lisboa"></div><div class="info"><div class="nm">Lucas de Lisboa</div><div class="rl">Gerente de Contas</div></div></div>
+          <div class="member"><div class="photo"><img src="https://assets-relatorio-saber.vercel.app/img/growth-class/img-08.jpg" alt="Larissa Siqueira"></div><div class="info"><div class="nm">Larissa Siqueira</div><div class="rl">Designer Sênior</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 03</span></div>
+  </section>
+  <!-- 04 · O FRAMEWORK · BOW TIE -->
+  <section class="slide">
+    <div class="bleed"><div class="slot ph-noite"></div></div>
+    <div class="bleed__scrim" style="background:linear-gradient(180deg,rgba(6,4,6,.82) 0%,rgba(6,4,6,.6) 40%,rgba(6,4,6,.42) 100%)"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">O framework · como o crescimento acontece</p><h2 class="h-med">Bow Tie: a máquina completa de receita</h2></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="btwrap">
+          <div class="glass" style="flex:1 1 auto;min-height:0;display:flex;padding:clamp(10px,1.4vw,22px);background:linear-gradient(155deg,rgba(8,6,8,.32),rgba(8,6,8,.14));backdrop-filter:blur(5px)"><svg class="btsvg" style="height:100%" viewBox="0 -86 1160 526" preserveAspectRatio="xMidYMid meet" font-family="'IBM Plex Sans',sans-serif">
+  <defs>
+    <linearGradient id="btk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7A0A02"/><stop offset="55%" stop-color="#E50914"/><stop offset="100%" stop-color="#FB2E0A"/>
+    </linearGradient>
+    <marker id="btarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#F7B733"/>
+    </marker>
+    <filter id="btglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <text x="270" y="16" text-anchor="middle" font-size="12.5" font-weight="600" letter-spacing=".16em" fill="rgba(255,255,255,.5)">AQUISIÇÃO · CONQUISTAR QUEM AINDA NÃO CONHECE</text>
+  <text x="890" y="16" text-anchor="middle" font-size="12.5" font-weight="600" letter-spacing=".16em" fill="rgba(255,255,255,.5)">MONETIZAÇÃO · CRESCER COM QUEM JÁ COMPROU</text>
+
+  <path d="M 1055 62 C 880 -78 280 -78 108 64" fill="none" stroke="#F7B733" stroke-width="2" stroke-dasharray="7 7" opacity=".85" marker-end="url(#btarr)"/>
+  <text x="580" y="-64" text-anchor="middle" font-size="12" font-weight="600" letter-spacing=".14em" fill="#F7B733">O LAÇO DA INDICAÇÃO · QUEM É BEM ATENDIDO TRAZ O PRÓXIMO</text>
+
+  <g stroke="#0b0709" stroke-width="3">
+    <polygon points="20,30 190,88 190,312 20,370" fill="rgba(229,9,20,.10)"/>
+    <polygon points="190,88 360,146 360,254 190,312" fill="rgba(229,9,20,.20)"/>
+    <polygon points="360,146 520,200 360,254" fill="rgba(229,9,20,.34)"/>
+  </g>
+  <polygon points="20,30 520,200 20,370" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" stroke-dasharray="6 6"/>
+
+  <g stroke="#0b0709" stroke-width="3">
+    <polygon points="800,146 640,200 800,254" fill="rgba(229,9,20,.34)"/>
+    <polygon points="800,146 970,88 970,312 800,254" fill="rgba(229,9,20,.20)"/>
+    <polygon points="970,88 1140,30 1140,370 970,312" fill="rgba(229,9,20,.10)"/>
+  </g>
+  <polygon points="1140,30 640,200 1140,370" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" stroke-dasharray="6 6"/>
+
+  <g fill="#fff" text-anchor="middle" font-family="Morganite,sans-serif" font-weight="700">
+    <text x="105" y="198" font-size="30" letter-spacing=".04em">ATRAIR</text>
+    <text x="275" y="198" font-size="30" letter-spacing=".04em">ENGAJAR</text>
+    <text x="422" y="204" font-size="22" letter-spacing=".03em">CONVERTER</text>
+    <text x="738" y="204" font-size="22" letter-spacing=".03em">RETER</text>
+    <text x="885" y="198" font-size="30" letter-spacing=".04em">EXPANDIR</text>
+    <text x="1055" y="198" font-size="30" letter-spacing=".04em">INDICAR</text>
+  </g>
+  <g fill="rgba(255,255,255,.62)" text-anchor="middle" font-size="12">
+    <text x="105" y="222">ser descoberto</text>
+    <text x="275" y="222">virar conversa</text>
+    <text x="885" y="222">novos formatos</text>
+    <text x="1055" y="222">gerar indicações</text>
+  </g>
+
+  <circle cx="580" cy="200" r="46" fill="url(#btk)" stroke="rgba(255,255,255,.3)" stroke-width="1.5" filter="url(#btglow)"/>
+  <text x="580" y="209" text-anchor="middle" font-family="Morganite,sans-serif" font-weight="700" font-size="26" letter-spacing=".06em" fill="#fff">VENDA</text>
+
+  <g font-size="12" font-weight="600" letter-spacing=".12em" text-anchor="middle">
+    <rect x="105" y="390" width="330" height="32" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)"/>
+    <text x="270" y="411" fill="rgba(255,255,255,.72)">ANTES DA VENDA</text>
+    <rect x="725" y="390" width="330" height="32" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)"/>
+    <text x="890" y="411" fill="rgba(255,255,255,.72)">DEPOIS DA VENDA</text>
+  </g>
+</svg></div>
+          <div style="display:flex;gap:clamp(10px,1.2vw,16px);flex-wrap:wrap;justify-content:center;flex:0 0 auto">
+            <span class="glass chip" style="background:rgba(8,6,8,.55)"><span class="dt"></span>A venda é o meio do caminho, não o fim</span>
+            <span class="glass chip" style="background:rgba(8,6,8,.55)"><span class="dt" style="background:#F7B733"></span>Cada etapa tem um dono, uma meta e um número</span>
+            <span class="chip" style="background:var(--g-impact);box-shadow:0 20px 50px -30px var(--c-red)"><span class="dt" style="background:#fff"></span>A Estruturação desenha as duas metades em 45 dias</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 04</span></div>
+  </section>
+
+<section class="slide">
+    <div class="glow glow--tl"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">O modelo V4</p><h2 class="h-med">Onde você está na jornada</h2><p class="body" style="max-width:66ch;margin-top:6px">Você contratou o Saber. Concluída a estruturação, a decisão de avançar para o Executar fica com você.</p></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="journey">
+          <div class="jcard active">
+            <span class="step">Etapa 01</span><h3>Saber</h3>
+            <ul>
+              <li>Definição de estratégia e desenho do funil.</li>
+              <li>Auditoria completa de mídia paga e orgânico.</li>
+              <li>Diagnóstico comercial, de design e de ambientes.</li>
+            </ul>
+            <span class="here"><svg class="ic" style="font-size:12px"><use href="#ic-flag"/></svg> Você está aqui</span>
+          </div>
+          <div class="jcard warm">
+            <span class="step">Etapa 02</span><h3>Ter</h3>
+            <ul>
+              <li>Criação de site e e-commerce.</li>
+              <li>Implementação de CRM.</li>
+              <li>Execução de um serviço específico.</li>
+            </ul>
+          </div>
+          <div class="jcard">
+            <span class="step">Etapa 03</span><h3>Executar</h3>
+            <ul>
+              <li>Time de marketing e performance dedicado.</li>
+              <li>Execução recorrente do plano do Saber.</li>
+              <li>Especialistas atuando como seu time.</li>
+            </ul>
+          </div>
+          <div class="jcard">
+            <span class="step">Etapa 04</span><h3>Potencializar</h3>
+            <ul>
+              <li>Foco em grandes contas consolidadas.</li>
+              <li>Faturamento na casa dos múltiplos milhões.</li>
+              <li>Ampliar resultado sobre base madura.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 05</span></div>
+  </section>
+<section class="slide slide--light">
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Entregáveis da Estruturação</p><h2 class="h-med" style="font-size:clamp(34px,3.6vw,56px)">Semana 1<span class="wcount">4 etapas</span></h2></div>
+      <div class="zone zone--top reveal" style="--d:1;margin-top:clamp(16px,2.2vh,30px)">
+        <table class="wtbl">
+          <thead><tr><th style="width:23%">Etapa</th><th>Tarefa</th><th style="width:20%">DRI</th></tr></thead>
+          <tbody>
+            <tr><td class="etapa" rowspan="4">Preparação</td><td class="tarefa">Criar Grupo com o Cliente + Boas-Vindas</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Preenchimento do V4 Marketing</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Reunião para alinhamento de expectativas e cronograma</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Solicitação de acesso de todos os canais e ferramentas do cliente</td><td class="dri">Account Manager</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 06</span></div>
+  </section>
+<section class="slide slide--light">
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Entregáveis da Estruturação</p><h2 class="h-med" style="font-size:clamp(34px,3.6vw,56px)">Semana 2<span class="wcount">8 etapas</span></h2></div>
+      <div class="zone zone--top reveal" style="--d:1;margin-top:clamp(16px,2.2vh,30px)">
+        <table class="wtbl">
+          <thead><tr><th style="width:23%">Etapa</th><th>Tarefa</th><th style="width:20%">DRI</th></tr></thead>
+          <tbody>
+            <tr><td class="etapa" rowspan="5">Pesquisa de Mercado</td><td class="tarefa">Definição e Sizing de Mercado (TAM / SAM / SOM)</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Estudo de Concorrentes</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Definição de ICPs + Comitê de Compra (B2B)</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Definição de Persona (B2C)</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Jobs To Be Done</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="etapa" rowspan="3">Posicionamento Estratégico</td><td class="tarefa">Comparativo de Soluções</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Diferenciais Competitivos</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Definição de PUV</td><td class="dri">Copywriter</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 07</span></div>
+  </section>
+<section class="slide slide--light">
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Entregáveis da Estruturação</p><h2 class="h-med" style="font-size:clamp(34px,3.6vw,56px)">Semana 3<span class="wcount">14 etapas</span></h2></div>
+      <div class="zone zone--top reveal" style="--d:1;margin-top:clamp(16px,2.2vh,30px)">
+        <table class="wtbl wtbl--dense">
+          <thead><tr><th style="width:23%">Etapa</th><th>Tarefa</th><th style="width:20%">DRI</th></tr></thead>
+          <tbody>
+            <tr><td class="etapa" rowspan="4">Diagnóstico de Mídia Paga</td><td class="tarefa">Revisão técnica das campanhas Meta Ads</td><td class="dri">Gestor de Tráfego</td></tr>
+            <tr><td class="tarefa">Revisão técnica das campanhas Google Ads</td><td class="dri">Gestor de Tráfego</td></tr>
+            <tr><td class="tarefa">Avaliação de eficiência dos investimentos</td><td class="dri">Gestor de Tráfego</td></tr>
+            <tr><td class="tarefa">Plano de Ação</td><td class="dri">Gestor de Tráfego</td></tr>
+            <tr><td class="etapa" rowspan="4">Diagnóstico de Criativos</td><td class="tarefa">Análise de Material Criativo para Anúncios</td><td class="dri">Designer Gráfico</td></tr>
+            <tr><td class="tarefa">Benchmarking de Anúncios</td><td class="dri">Designer Gráfico</td></tr>
+            <tr><td class="tarefa">Análise e Bench Social Media (Fixados, Destaques, Bio e Posts)</td><td class="dri">Copywriter</td></tr>
+            <tr><td class="tarefa">Plano de Ação</td><td class="dri">Copywriter</td></tr>
+            <tr><td class="etapa" rowspan="4">Diagnóstico de Ambientes (CRO)</td><td class="tarefa">Estudo de Copy e Narrativa do ambiente (LP/Site)</td><td class="dri">Copywriter</td></tr>
+            <tr><td class="tarefa">Análise de Design e Usabilidade</td><td class="dri">Designer Gráfico</td></tr>
+            <tr><td class="tarefa">Cliente Oculto</td><td class="dri">Gestor de Tráfego</td></tr>
+            <tr><td class="tarefa">Plano de Ação</td><td class="dri">Copywriter</td></tr>
+            <tr><td class="etapa" rowspan="2">Entregáveis</td><td class="tarefa">3 Criativos para anúncio</td><td class="dri">Designer Gráfico</td></tr>
+            <tr><td class="tarefa">1 Landing Page (Wireframe)</td><td class="dri">Copywriter</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 08</span></div>
+  </section>
+<section class="slide slide--light">
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Entregáveis da Estruturação</p><h2 class="h-med" style="font-size:clamp(34px,3.6vw,56px)">Semana 4<span class="wcount">3 etapas</span></h2></div>
+      <div class="zone zone--top reveal" style="--d:1;margin-top:clamp(16px,2.2vh,30px)">
+        <table class="wtbl">
+          <thead><tr><th style="width:23%">Etapa</th><th>Tarefa</th><th style="width:20%">DRI</th></tr></thead>
+          <tbody>
+            <tr><td class="etapa" rowspan="3">Diagnóstico Comercial</td><td class="tarefa">Análise Técnica, Comportamental & Processual</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Cliente Oculto</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Plano de Ação</td><td class="dri">Account Manager</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 09</span></div>
+  </section>
+<section class="slide slide--light">
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Entregáveis da Estruturação</p><h2 class="h-med" style="font-size:clamp(34px,3.6vw,56px)">Semana 5<span class="wcount">6 etapas</span></h2></div>
+      <div class="zone zone--top reveal" style="--d:1;margin-top:clamp(16px,2.2vh,30px)">
+        <table class="wtbl">
+          <thead><tr><th style="width:23%">Etapa</th><th>Tarefa</th><th style="width:20%">DRI</th></tr></thead>
+          <tbody>
+            <tr><td class="etapa" rowspan="2">Estratégia de Marketing & Vendas</td><td class="tarefa">Matriz de Priorização de Modelo de Go To Market e Canais</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="tarefa">Fluxo de estratégias de Aquisição, Engajamento, Monetização e Retenção</td><td class="dri">Account Manager</td></tr>
+            <tr><td class="etapa" rowspan="4">Entregáveis</td><td class="tarefa">Manual de copy</td><td class="dri">Profissional de Redação Publicitária</td></tr>
+            <tr><td class="tarefa">Manual de identidade visual</td><td class="dri">Profissional de Web Design (Desenvolvedor)</td></tr>
+            <tr><td class="tarefa">Forecast/Projeção 3 meses mídia</td><td class="dri">Profissional de Gestão de Mídia Paga</td></tr>
+            <tr><td class="tarefa">Entrega Final com o Cliente</td><td class="dri">Account Manager</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 10</span></div>
+  </section>
+<section class="slide">
+    <div class="glow glow--tl"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Como vamos trabalhar</p><h2 class="h-med">A rotina da Estruturação</h2></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="split">
+          <div class="col">
+            <div class="display" style="font-size:clamp(92px,11vw,176px);line-height:.86"><span class="clip">45 dias</span></div>
+            <p class="lead" style="max-width:24ch">O ciclo completo do Saber, do alinhamento à entrega final.</p>
+          </div>
+          <ul class="steps">
+            <li><span class="ic-wrap"><svg class="ic"><use href="#ic-layers"/></svg></span><span><strong>Entregas semanais</strong>, com avanço visível a cada semana.</span></li>
+            <li><span class="ic-wrap"><svg class="ic"><use href="#ic-chat"/></svg></span><span><strong>Tudo no grupo</strong>, com atualizações ao longo da semana.</span></li>
+            <li><span class="ic-wrap"><svg class="ic"><use href="#ic-folder"/></svg></span><span><strong>Pasta compartilhada</strong> com entregáveis, auditorias e materiais.</span></li>
+            <li><span class="ic-wrap"><svg class="ic"><use href="#ic-shield"/></svg></span><span><strong>Acessos e materiais de marca</strong> que apoiem a estruturação.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 11</span></div>
+  </section>
+  <!-- 12 · PRÓXIMOS PASSOS · JORNADA -->
+  <section class="slide">
+    <div class="glow glow--br"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Próximos passos</p><h2 class="h-med">Da Growth Class à entrega final</h2></div>
+      <div class="zone reveal" style="--d:1">
+        <div class="roadmap">
+          <div class="rm on">
+            <span class="pt2"></span><span class="when">Hoje</span>
+            <div class="rm-card">
+              <h3>Growth Class</h3>
+              <ul>
+                <li>Seu time e o modelo de trabalho apresentados.</li>
+                <li>O framework Bow Tie aplicado ao negócio.</li>
+                <li>Tudo o que está incluso na Estruturação.</li>
+              </ul>
+              <span class="here"><svg class="ic" style="font-size:12px"><use href="#ic-pin"/></svg> Você está aqui</span>
+            </div>
+          </div>
+          <div class="rm">
+            <span class="pt2"></span><span class="when">Em até 48h</span>
+            <div class="rm-card">
+              <h3>Kick-off</h3>
+              <ul>
+                <li>Mergulho nos canais, nos números e nos materiais.</li>
+                <li>Esclarecimento das dúvidas que ficaram de hoje.</li>
+                <li>Acessos e materiais de marca liberados.</li>
+                <li>Etapa crítica para entender o negócio a fundo.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rm">
+            <span class="pt2"></span><span class="when">Em até 7 dias</span>
+            <div class="rm-card">
+              <h3>Primeira entrega</h3>
+              <ul>
+                <li>Pesquisa de mercado: TAM, SAM e SOM.</li>
+                <li>Estudo de concorrentes e definição de ICPs.</li>
+                <li>Posicionamento e proposta única de valor.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rm">
+            <span class="pt2"></span><span class="when">Dia 45</span>
+            <div class="rm-card">
+              <h3>Entrega final</h3>
+              <ul>
+                <li>Plano completo de marketing e vendas.</li>
+                <li>Forecast e metas para os próximos 3 meses.</li>
+                <li>Decisão de avançar para o Executar.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sig"><span class="logo logo--sig"></span><span class="pg">Growth Class · 12</span></div>
+  </section>
+
+  <!-- 13 · AGRADECIMENTO -->
+  <section class="slide closing">
+    <div class="glow glow--br"></div>
+    <div class="bleed"><div class="slot ph-capa"></div></div>
+    <div class="bleed__scrim" style="background:linear-gradient(90deg,rgba(60,4,8,.94) 0%,rgba(60,4,8,.62) 46%,rgba(60,4,8,.12) 78%)"></div>
+    <div class="slide__inner">
+      <div class="head reveal"><p class="eyebrow">Obrigado</p><h2 class="display h-section">Vamos estruturar<br>o crescimento</h2></div>
+      <div class="zone zone--top reveal" style="--d:1">
+        <p class="lead" style="max-width:36ch">O próximo passo é o Kick-off em até 48 horas. A partir dele, colocamos a Estruturação em movimento.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev" aria-label="anterior">&#8592;</button>
+  <span class="count" id="count">1 / 13</span>
+  <button id="next" aria-label="próximo">&#8594;</button>
+</div>
+
+<script>
+  const deck=document.getElementById('deck');const slides=[...deck.querySelectorAll('.slide')];const count=document.getElementById('count');let i=0;
+  function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth',inline:'start'});count.textContent=(i+1)+' / '+slides.length;}
+  document.getElementById('next').onclick=()=>go(i+1);document.getElementById('prev').onclick=()=>go(i-1);
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(i+1)}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}});
+  let t;deck.addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(()=>{const idx=Math.round(deck.scrollLeft/deck.clientWidth);if(idx!==i){i=idx;count.textContent=(i+1)+' / '+slides.length}},80)});
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting)en.target.classList.add('is-active')}),{threshold:.4});
+  slides.forEach(s=>io.observe(s));slides[0].classList.add('is-active');
+  count.textContent='1 / '+slides.length;
+</script>
+</body>
+</html>
