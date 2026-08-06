@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA ID · V4 Bilinski&Co · Template</title>
+<link rel="icon" href="https://ai.bilinski.cloud/logos/bilinski/v4-icon-preto.jpg">
+<link href="https://assets-relatorio-saber.vercel.app/fonts/fonts.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,700,0,0" rel="stylesheet">
+<style>
+/* ============ TOKENS · BRANDBOOK V4 2026 ============ */
+:root{
+  --c-red:#E50914; --c-red-soft:#F0141E; --c-flame:#FB2E0A; --c-orange:#FF481F;
+  --c-deep:#560303; --c-brown:#280000; --c-brown-2:#3D0202; --c-wine:#650E0F;
+  --c-black:#050505; --c-dark-gray:#1E2124; --c-gray:#606060; --c-chumbo:#312D2D;
+  --c-light:#F2F2F2; --c-section:#FAF9F7; --c-white:#FFFFFF;
+  --c-cream:#FFEBC8; --c-peach:#FFB4A0; --c-coral:#E88A70;
+  --c-cta:#00A86B; --c-cta-aa:#0E8420; --c-cta-hover:#FF6200; --c-amber:#FFDD00;
+  --c-w70:rgba(255,255,255,.72); --c-w45:rgba(255,255,255,.46); --c-w14:rgba(255,255,255,.14);
+  /* Gradientes oficiais 2026 — PROIBIDO criar outros */
+  --grad-primary:linear-gradient(135deg,#560303 0%,#FB2E0A 100%);
+  --grad-subtle:linear-gradient(135deg,#560303 0%,#C41E08 100%);
+  --grad-radial:radial-gradient(ellipse at 20% 80%,#FB2E0A 0%,#560303 100%);
+  --grad-footer:linear-gradient(180deg,#3D0202 0%,#560303 100%);
+  --f-display:'Morganite',sans-serif;
+  --f-body:'IBM Plex Sans',sans-serif;
+  --f-mono:'IBM Plex Mono',monospace;
+  --pad:clamp(44px,4.6vw,84px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--c-black);color:var(--c-white);font-family:var(--f-body)}
+img{display:block;max-width:100%}
+
+/* ============ ESTRUTURA DE SLIDES 16:9 ============ */
+.slide{position:relative;width:100vw;aspect-ratio:16/9;overflow:hidden;display:flex;flex-direction:column}
+.slide__inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding:var(--pad)}
+.bg{position:absolute;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover}
+.scrim{position:absolute;inset:0;z-index:1}
+
+/* Tipografia */
+.display{font-family:var(--f-display);font-weight:700;text-transform:uppercase;line-height:.82;letter-spacing:.005em}
+.h-cover{font-size:clamp(72px,11vw,190px)}
+.h-sec{font-size:clamp(48px,6.4vw,110px)}
+.eyebrow{font-family:var(--f-mono);font-weight:500;font-size:clamp(10px,.85vw,14px);letter-spacing:.18em;text-transform:uppercase;color:var(--c-w70)}
+.lede{font-size:clamp(15px,1.35vw,22px);font-weight:500;color:var(--c-w70);max-width:56ch}
+.clip-red{background:linear-gradient(115deg,#C41E08 5%,#E50914 45%,#FB2E0A 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Header e footer padrão do slide */
+.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto}
+.head img{height:clamp(20px,2.2vw,34px)}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.pagenum{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--c-w45)}
+
+/* ============ V4 GLASS · RECEITA CANÔNICA (não alterar) ============ */
+.v4-glass{
+  position:relative;border-radius:16px;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 0 150px rgba(255,255,255,.18),
+    inset 0 0 10px rgba(255,255,255,.45),
+    inset 0 0 10px rgba(255,255,255,.45),
+    inset 0 0 100px rgba(255,255,255,.22),
+    -5px 5px 20px rgba(0,0,0,.10);
+  border:1px solid rgba(255,255,255,.35);
+}
+@supports not (backdrop-filter:blur(1px)){.v4-glass{background:rgba(60,4,4,.55)}}
+
+/* Ícones Material Symbols Rounded 700 */
+.ms{font-family:'Material Symbols Rounded';font-weight:700;font-size:clamp(24px,2.2vw,34px);line-height:1;color:var(--c-white)}
+
+/* ============ SLIDE 1 · CAPA ============ */
+.capa .scrim{background:linear-gradient(90deg,rgba(40,0,0,.55) 0%,rgba(40,0,0,.15) 45%,transparent 70%)}
+.capa .title-zone{margin:auto 0;max-width:58%}
+.capa .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(16px,2vh,28px)}
+.chip{font-size:clamp(10px,.8vw,13px);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 16px;border-radius:999px;border:1px solid var(--c-w14);background:rgba(255,255,255,.06)}
+.chip::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c-red);margin-right:8px}
+
+/* ============ SLIDE 2 · SUMÁRIO (mulher à direita, glass à esquerda) ============ */
+.sumario .bg img{object-position:right center}
+.sumario .panel{width:min(46%,620px);margin:auto 0;padding:clamp(24px,2.6vw,44px)}
+.sumario .item{display:flex;align-items:center;gap:16px;padding:clamp(10px,1.3vh,16px) 0;border-bottom:1px solid var(--c-w14)}
+.sumario .item:last-child{border-bottom:0}
+.sumario .num{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,2.6vw,42px);color:var(--c-amber);min-width:1.4em}
+.sumario .item b{font-size:clamp(14px,1.25vw,20px);font-weight:600}
+.sumario .item span{display:block;font-size:clamp(11px,.95vw,14px);color:var(--c-w70)}
+
+/* ============ SLIDE 3 · CONTEÚDO (gradiente + cards glass) ============ */
+.conteudo{background:var(--grad-primary)}
+.conteudo .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,26px);margin-top:clamp(20px,3vh,40px)}
+.card{padding:clamp(20px,2.2vw,36px);display:flex;flex-direction:column;gap:12px}
+.card h3{font-size:clamp(15px,1.35vw,22px);font-weight:600}
+.card p{font-size:clamp(12px,1.05vw,16px);color:var(--c-w70);line-height:1.5}
+.icon-chip{width:clamp(44px,4vw,60px);aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+
+/* ============ SLIDE 4 · GRÁFICO (gradiente + glass) ============ */
+.grafico{background:var(--grad-radial)}
+.grafico .wrap{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,2vw,32px);margin-top:clamp(20px,3vh,40px);flex:1;min-height:0}
+.chart{padding:clamp(20px,2.2vw,36px);display:flex;flex-direction:column}
+.bars{flex:1;display:flex;align-items:flex-end;gap:clamp(10px,1.4vw,24px);padding-top:16px}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;height:100%}
+.bar i{display:block;background:linear-gradient(180deg,var(--c-flame),var(--c-red));border-radius:8px 8px 0 0;box-shadow:0 0 24px rgba(229,9,20,.35)}
+.bar.destaque i{background:linear-gradient(180deg,var(--c-amber),var(--c-orange))}
+.bar b{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,1.8vw,30px);text-align:center}
+.bar span{font-size:clamp(10px,.8vw,12px);color:var(--c-w70);text-align:center;letter-spacing:.06em;text-transform:uppercase}
+.kpis{display:flex;flex-direction:column;gap:clamp(12px,1.4vw,20px)}
+.kpi{padding:clamp(16px,1.8vw,28px);flex:1;display:flex;flex-direction:column;justify-content:center}
+.kpi b{font-family:var(--f-display);font-weight:700;font-size:clamp(36px,4vw,66px);line-height:.9}
+.kpi span{font-size:clamp(11px,.95vw,14px);color:var(--c-w70)}
+
+/* ============ SLIDE 5 · REVERBERAÇÃO (divisor) ============ */
+.reverb{background:var(--grad-subtle)}
+.reverb .slide__inner{align-items:center;justify-content:center}
+.reverb .r-outer{width:min(72%,900px);aspect-ratio:16/8;padding:clamp(24px,3vw,56px);display:flex;align-items:center;justify-content:center}
+.reverb .r-mid{width:78%;height:76%;padding:clamp(20px,2.4vw,44px);display:flex;align-items:center;justify-content:center}
+.reverb .r-inner{width:76%;height:72%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}
+
+/* ============ SLIDE 6 · CLOSING ============ */
+.closing{background:var(--grad-footer)}
+.closing .slide__inner{align-items:flex-start;justify-content:center;gap:clamp(14px,2vh,24px)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--c-cta);color:var(--c-white);font-weight:700;font-size:clamp(14px,1.2vw,19px);padding:clamp(14px,1.5vw,20px) clamp(24px,2.6vw,40px);border-radius:999px;text-decoration:none;transition:background .2s}
+.cta:hover{background:var(--c-cta-hover)}
+
+@media print{.slide{page-break-after:always}}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1 · CAPA -->
+<section class="slide capa">
+  <div class="bg"><img src="https://assets-relatorio-saber.vercel.app/img/nova-id/capa-mao-logo.webp" alt=""></div>
+  <div class="scrim"></div>
+  <div class="slide__inner">
+    <div class="head">
+      <img src="https://ai.bilinski.cloud/logos/logo-bilinski-branco.png" alt="V4 Bilinski">
+      <span class="eyebrow">Documento interno · Nova ID</span>
+    </div>
+    <div class="title-zone">
+      <p class="eyebrow" style="margin-bottom:14px">Template experimental · 2026</p>
+      <h1 class="display h-cover">Título da<br><span class="clip-red">Apresentação</span></h1>
+      <p class="lede" style="margin-top:16px">Subtítulo de apoio em uma frase. Data ou contexto.</p>
+      <div class="chips">
+        <span class="chip">Seção um</span><span class="chip">Seção dois</span><span class="chip">Seção três</span>
+      </div>
+    </div>
+    <div class="foot"><span class="pagenum">1 / 6</span></div>
+  </div>
+</section>
+
+<!-- SLIDE 2 · SUMÁRIO · mulher à direita (não cobrir), glass à esquerda -->
+<section class="slide sumario">
+  <div class="bg"><img src="https://assets-relatorio-saber.vercel.app/img/nova-id/sumario-mulher.webp" alt=""></div>
+  <div class="slide__inner">
+    <div class="head">
+      <img src="https://ai.bilinski.cloud/logos/logo-bilinski-branco.png" alt="V4 Bilinski">
+      <span class="eyebrow">Sumário</span>
+    </div>
+    <div class="v4-glass panel">
+      <p class="eyebrow" style="margin-bottom:6px">O que vamos ver</p>
+      <h2 class="display h-sec" style="font-size:clamp(38px,4.2vw,68px);margin-bottom:12px">Sumário</h2>
+      <div class="item"><span class="num">01</span><div><b>Primeiro bloco</b><span>Descrição curta do bloco</span></div></div>
+      <div class="item"><span class="num">02</span><div><b>Segundo bloco</b><span>Descrição curta do bloco</span></div></div>
+      <div class="item"><span class="num">03</span><div><b>Terceiro bloco</b><span>Descrição curta do bloco</span></div></div>
+      <div class="item"><span class="num">04</span><div><b>Quarto bloco</b><span>Descrição curta do bloco</span></div></div>
+    </div>
+    <div class="foot"><span class="pagenum">2 / 6</span></div>
+  </div>
+</section>
+
+<!-- SLIDE 3 · CONTEÚDO · gradiente oficial + cards glass + ícones Material Rounded -->
+<section class="slide conteudo">
+  <div class="slide__inner">
+    <div class="head">
+      <img src="https://ai.bilinski.cloud/logos/logo-bilinski-branco.png" alt="V4 Bilinski">
+      <span class="eyebrow">Seção · Conteúdo</span>
+    </div>
+    <div>
+      <p class="eyebrow" style="margin-bottom:10px">Eyebrow da seção</p>
+      <h2 class="display h-sec">Título da <span style="color:var(--c-amber)">seção</span></h2>
+      <div class="grid">
+        <div class="v4-glass card">
+          <div class="v4-glass icon-chip"><span class="ms">query_stats</span></div>
+          <h3>Card um</h3><p>Texto de apoio do card. Dado antes de adjetivo, direto ao ponto.</p>
+        </div>
+        <div class="v4-glass card">
+          <div class="v4-glass icon-chip"><span class="ms">rocket_launch</span></div>
+          <h3>Card dois</h3><p>Texto de apoio do card. Dado antes de adjetivo, direto ao ponto.</p>
+        </div>
+        <div class="v4-glass card">
+          <div class="v4-glass icon-chip"><span class="ms">verified</span></div>
+          <h3>Card três</h3><p>Texto de apoio do card. Dado antes de adjetivo, direto ao ponto.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span class="pagenum">3 / 6</span></div>
+  </div>
+</section>
+
+<!-- SLIDE 4 · GRÁFICO · gradiente radial + glass -->
+<section class="slide grafico">
+  <div class="slide__inner">
+    <div class="head">
+      <img src="https://ai.bilinski.cloud/logos/logo-bilinski-branco.png" alt="V4 Bilinski">
+      <span class="eyebrow">Seção · Dados</span>
+    </div>
+    <h2 class="display h-sec">Números que <span style="color:var(--c-amber)">importam</span></h2>
+    <div class="wrap">
+      <div class="v4-glass chart">
+        <p class="eyebrow">Evolução mensal · exemplo</p>
+        <div class="bars">
+          <div class="bar"><i style="height:34%"></i><b>34</b><span>Abr</span></div>
+          <div class="bar"><i style="height:48%"></i><b>48</b><span>Mai</span></div>
+          <div class="bar"><i style="height:61%"></i><b>61</b><span>Jun</span></div>
+          <div class="bar destaque"><i style="height:82%"></i><b>82</b><span>Jul</span></div>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="v4-glass kpi"><b>82%</b><span>KPI principal do período</span></div>
+        <div class="v4-glass kpi"><b>2,4x</b><span>Crescimento vs trimestre anterior</span></div>
+      </div>
+    </div>
+    <div class="foot"><span class="pagenum">4 / 6</span></div>
+  </div>
+</section>
+
+<!-- SLIDE 5 · REVERBERAÇÃO · divisor conceitual -->
+<section class="slide reverb">
+  <div class="slide__inner">
+    <div class="v4-glass r-outer"><div class="v4-glass r-mid"><div class="v4-glass r-inner">
+      <p class="eyebrow">Divisor de seção</p>
+      <h2 class="display" style="font-size:clamp(40px,5vw,84px)">Conceito central</h2>
+    </div></div></div>
+    <div class="foot" style="position:absolute;left:var(--pad);right:var(--pad);bottom:var(--pad)"><span class="pagenum">5 / 6</span></div>
+  </div>
+</section>
+
+<!-- SLIDE 6 · CLOSING · CTA verde -->
+<section class="slide closing">
+  <div class="slide__inner">
+    <p class="eyebrow">Próximo passo</p>
+    <h2 class="display h-cover" style="font-size:clamp(60px,8vw,140px)">Vamos <span class="clip-red">estruturar</span></h2>
+    <p class="lede">Fechamento com ação clara. O CTA é verde, nunca vermelho.</p>
+    <a class="cta" href="#">Quero começar agora <span class="ms" style="font-size:1.2em">arrow_forward</span></a>
+    <div class="foot" style="width:100%"><img src="https://ai.bilinski.cloud/logos/logo-bilinski-branco.png" alt="V4 Bilinski" style="height:26px"><span class="pagenum">6 / 6</span></div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('keydown',e=>{
+  const s=[...document.querySelectorAll('.slide')];
+  const y=window.scrollY,h=innerHeight;
+  const i=Math.round(y/ s[0].offsetHeight);
+  if(e.key==='ArrowRight'||e.key==='PageDown') s[Math.min(i+1,s.length-1)].scrollIntoView({behavior:'smooth'});
+  if(e.key==='ArrowLeft'||e.key==='PageUp') s[Math.max(i-1,0)].scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>

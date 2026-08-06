@@ -1,0 +1,23 @@
+/* V4 GLASS — receita canônica do BrandBook 2026 (6 camadas do Figma Effect Style).
+   NUNCA alterar valores. Usar sobre fundo vermelho/gradiente da marca. */
+.v4-glass{
+  position:relative;border-radius:16px;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 0 150px rgba(255,255,255,.18),
+    inset 0 0 10px rgba(255,255,255,.45),
+    inset 0 0 10px rgba(255,255,255,.45),
+    inset 0 0 100px rgba(255,255,255,.22),
+    -5px 5px 20px rgba(0,0,0,.10);
+  border:1px solid rgba(255,255,255,.35);
+}
+/* Reverberação: 3 camadas .v4-glass aninhadas e centralizadas (externa > média > interna) */
+.v4-reverb--outer{padding:clamp(24px,3vw,56px)}
+.v4-reverb--mid{width:78%;padding:clamp(20px,2.4vw,44px)}
+.v4-reverb--inner{width:76%}
+/* Fallback sem backdrop-filter */
+@supports not (backdrop-filter:blur(1px)){
+  .v4-glass{background:rgba(60,4,4,.55)}
+}
